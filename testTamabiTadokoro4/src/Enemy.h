@@ -14,7 +14,14 @@
 class Enemy{
 public:
     ofVec2f pos;
-
+    ofVec2f posInit;
+    
+    float vel;
+    
+    bool isHit;
+    
+    float w, h, wInit, hInit;
+    
     Enemy();
     ~Enemy();
     
@@ -22,6 +29,12 @@ public:
     void draw();
     
     void setInitialCondition(float x, float y);
+    
+    void erasing();
+    void checkHit(float x, float y);
+    
+    void resetInitialCondition();
+    
     
 };
 

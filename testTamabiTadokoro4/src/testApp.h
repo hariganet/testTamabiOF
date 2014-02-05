@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Particle.h"
+#include "Enemies.h"
 
 
 class testApp : public ofBaseApp{
@@ -21,6 +22,10 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-        Particle p;
-		
+        vector<Particle> particles;
+        const int NUM = 100;
+    
+    ofImage img;
+    
+        //Enemies enemyGroup;
 };
