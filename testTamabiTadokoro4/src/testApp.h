@@ -27,5 +27,6 @@ class testApp : public ofBaseApp{
     
     ofImage img;
     
-        //Enemies enemyGroup;
+    ofVec2f preMouse;
+    
 };

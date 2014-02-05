@@ -40,3 +40,27 @@ void Particle::update(){
 void Particle::draw(){
     ofCircle(pos.x, pos.y, 3);
 }
+
+void Particle::bounceOffWalls(){
+	//壁の範囲を設定
+	float minx = 0;
+	float miny = 0;
+	float maxx = ofGetWidth();
+	float maxy = ofGetHeight();
+	//左右の壁でのバウンド
+	if (pos.x > maxx){
+		pos.x = maxx;
+		vel.x *= -1;
+	} else if (pos.x < minx){
+		pos.x = minx;
+		vel.x *= -1;
+	}
+	//上下の壁でのバウンド
+	if (pos.y > maxy){
+		pos.y = maxy;
+		vel.y *= -1;
+	} else if (pos.y < miny){
+		pos.y = miny;
+		vel.y *= -1;
+	}
+}

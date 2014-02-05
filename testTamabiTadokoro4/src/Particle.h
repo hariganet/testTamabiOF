@@ -26,6 +26,8 @@ public:
     void setInitialCondition(float px, float py, float vx, float vy);
     void update();
     void draw();
+    
+    void bounceOffWalls();
 };
 
 #endif /* defined(__testTamabiTadokoro4__Particle__) */

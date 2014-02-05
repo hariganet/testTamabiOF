@@ -5,6 +5,7 @@ void testApp::setup(){
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
     ofBackground(0, 0, 0);
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
 
     img.loadImage("particle32.png");
 }
@@ -13,39 +14,29 @@ void testApp::setup(){
 void testApp::update(){
     for(int i=0; i<particles.size(); ++i){
         particles[i].resetForce();
-        //particles[i].addForce(0, 0.1);
+        particles[i].addForce(0, 0.28);
         particles[i].addDampingForce();
+		particles[i].bounceOffWalls();
         particles[i].update();
     }
     
     std::cout << particles.size() << std::endl;
-    
-    //enemyGroup.update();
-    //enemyGroup.checkHit(p.pos.x, p.pos.y);
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofSetColor(255, 255, 255);
 
-    string message = "Current particle num = " + ofToString(particles.size(), 0);
-    ofDrawBitmapString(message, 20, 20);
-    
-    
-//    ofNoFill();
-//    ofBeginShape();
+//    string message = "Current particle num = " + ofToString(particles.size(), 0);
+//    ofDrawBitmapString(message, 20, 20);
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	ofSetColor(0, 0, 0, 31);
+	ofRect(0, 0, ofGetWidth(), ofGetHeight());
+	
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
+    ofSetColor(255, 255, 255);
     for(int i=0; i<particles.size(); ++i){
-        float posx = particles[i].pos.x - 16;
-        float posy = particles[i].pos.y - 16;
-        img.draw(posx, posy);
-        
-//        particles[i].draw();
-//        ofCurveVertex(particles[i].pos.x, particles[i].pos.y);
+        img.draw(particles[i].pos.x - 16, particles[i].pos.y - 16);
     }
-//    ofEndShape();
-    
-    
-    //enemyGroup.draw();
 }
 
 //--------------------------------------------------------------
@@ -68,20 +59,31 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-
+    preMouse.x = x;
+    preMouse.y = y;
+    
 }
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
+
+    float dx = x - preMouse.x;
+    float dy = y - preMouse.y;
+    
     Particle myParticle;
-    myParticle.setInitialCondition(x, y, ofRandom(-3, 3), ofRandom(-3, 3));
+    myParticle.setInitialCondition(x, y, dx*0.5, dy*0.5);
     particles.push_back(myParticle);
 
+    preMouse.x = x;
+    preMouse.y = y;
+    
 }
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-
+    particles.clear();
+    preMouse.x = x;
+    preMouse.y = y;
 }
 
 //--------------------------------------------------------------
