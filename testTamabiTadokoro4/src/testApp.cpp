@@ -14,9 +14,9 @@ void testApp::setup(){
 void testApp::update(){
     for(int i=0; i<particles.size(); ++i){
         particles[i].resetForce();
-        particles[i].addForce(0, 0.28);
+        particles[i].addForce(0, 0.01);
         particles[i].addDampingForce();
-		particles[i].bounceOffWalls();
+		//particles[i].bounceOffWalls();
         particles[i].update();
     }
     
@@ -81,7 +81,7 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    particles.clear();
+    //particles.clear();
     preMouse.x = x;
     preMouse.y = y;
 }

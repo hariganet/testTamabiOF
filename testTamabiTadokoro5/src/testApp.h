@@ -21,7 +21,9 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
-    spring mySpring;
-    particle particle_a, particle_b;
+    vector<spring> springs;
+    vector<particle> particles;
+    
+    ofImage pimg;
     
 };

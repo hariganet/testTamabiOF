@@ -4,47 +4,86 @@
 void testApp::setup(){
 
     ofBackground(0, 0, 0);
-    
     ofSetVerticalSync(true) ;
     ofSetFrameRate(60);
+    //ofSetBackgroundAuto(false);
+    pimg.loadImage("particle32.png");
     
-    particle_a.setInitialCondition(400, 400, 0, 0);
-    particle_b.setInitialCondition(500, 500, 0, 0);
+    for(int i=0; i<200; ++i){
+        particle myParticle;
+        
+        float x = 500 + 100 * cos((i/200.0) * TWO_PI);
+        float y = 500 + 100 * sin((i/200.0) * TWO_PI);
+        
+        myParticle.setInitialCondition(x, y, 0, 0);
+        particles.push_back(myParticle);
+    }
     
-    mySpring.distance = 100;
-    mySpring.springiness = 0.1f;
-    mySpring.particleA = &particle_a;
-    mySpring.particleB = &particle_b;
+    for(int i=0; i<particles.size(); ++i){
+        spring mySpring;
+        mySpring.distance = 4;
+        mySpring.springiness = 0.2f;
+        mySpring.particleA = &(particles[i]);
+        mySpring.particleB = &(particles[(i+1)%particles.size()]);
+        springs.push_back(mySpring);
+    }
+    
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    particle_a.resetForce();
-    particle_b.resetForce();
+    for(int i=0; i<particles.size(); ++i){
+        particles[i].resetForce();
+    }
+
+    for(int i=0; i<particles.size(); ++i){
+        particles[i].addRepulsionForce(mouseX, mouseY, 200, 0.7f);
+        
+        for (int j = 0; j < i; j++){
+			particles[i].addRepulsionForce(particles[j], 50, 0.1);
+		}
+
+        
+    }
     
-    mySpring.update();
     
-    particle_a.bounceOffWalls();
-    particle_a.update();
-    
-    particle_b.bounceOffWalls();
-    particle_b.update();
+    for(int i=0; i<springs.size(); ++i){
+        springs[i].update();
+    }
+
+    for(int i=0; i<particles.size(); ++i){
+        particles[i].addDampingForce();
+        particles[i].bounceOffWalls();
+        particles[i].update();
+    }
+ 
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofSetColor(255, 255, 255);
+    ofSetColor(127, 127, 127);
+    for(int i=0; i<springs.size(); ++i){
+        springs[i].draw();
+    }
     
-    mySpring.draw();
-    
-    particle_a.draw();
-    particle_b.draw();
+    ofSetColor(31, 127, 255);
+    for(int i=0; i<particles.size(); ++i){
+        particles[i].draw();
+    }
 
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
+    switch(key){
+        case ' ':
+        for(int i=0; i<particles.size(); ++i){
+            particles[i].setInitialCondition(ofRandom(0, ofGetWidth()), ofGetWidth(), ofRandom(0, ofGetHeight()), 0);
+        }
+        break;
+    }
+    
 }
 
 //--------------------------------------------------------------
@@ -59,17 +98,17 @@ void testApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
-    particle_a.pos.set(mouseX, mouseY);
+    particles[0].pos.set(mouseX, mouseY);
 }
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    particle_a.bFixed = true;
+    particles[0].bFixed = true;
 }
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
-    particle_a.bFixed = false;
+    particles[0].bFixed = false;
 }
 
 //--------------------------------------------------------------
