@@ -7,6 +7,7 @@ void testApp::setup(){
     ofBackground(0, 0, 0);
     ofEnableBlendMode(OF_BLENDMODE_ADD);
 
+//    img.loadImage("particle32.png");
     img.loadImage("particle32.png");
 }
 
